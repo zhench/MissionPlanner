@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="plotly-latest.min.js" > </script>
+<script src="hud.js" > </script>
+</head>
+<body>
+  <div id="graph"></div><br>
+      <canvas id="canvas" width="500" height="375">        </canvas><br>
+	   <div id="serverStatus" style=""></div>
+  <script src="plotly.js" > </script>
+   <script> 
+   draw();
+   
+var socket;
+   
+if (window["WebSocket"]) {
+	var host = "ws://"+window.location.hostname+":56781/websocket/server";
+	if(window.location.hostname == "")
+		host = "ws://localhost:56781/websocket/server";
+	try{
+		socket = new WebSocket(host);
+
+		window.onbeforeunload = function(){ socket.close();  }
+		socket.onopen    = function(msg){ document.getElementById("serverStatus").innerHTML = "onopen"; jsoncount=0; };
+		socket.onmessage = function(msg){
+			jsoncount++;
+
+			var data = JSON.parse(msg.data);
+
+			if(data.hasOwnProperty('FrameString'))
+			{
+				MAV = data;
+			}
+			else if(data.hasOwnProperty('rateattitude'))
+			{
+				cs = data;
+				
+							roll = cs.roll;
+                            pitch = cs.pitch;
+                            yaw = cs.yaw;
+
+                            lat = cs.lat;
+                            lng = cs.lng;
+                            alt = cs.alt;
+							
+									var time = new Date();
+							
+var olderTime = time.setMinutes(time.getMinutes() - 1);
+var futureTime = time.setMinutes(time.getMinutes() + 1);
+							
+							  var minuteView = {
+        xaxis: {
+          type: 'date',
+          range: [olderTime,futureTime]
+        }
+      };
+
+  Plotly.relayout('graph', minuteView);
+  
+					
+							
+							  Plotly.extendTraces('graph', {
+			  x: [[time],[time],[time]],
+    y: [[roll],[pitch],[yaw]]
+  }, [0,1,2])
+			}
+			else if(data[0].hasOwnProperty('mission_type'))
+			{
+				wps = data;
+			} 
+			else 
+			{ return; }
+		};
+		socket.onerror   = function(msg){ document.getElementById("serverStatus").innerHTML = "Error: "+msg.data; };
+		socket.onclose   = function(msg){ document.getElementById("serverStatus").innerHTML = "Disconnected - status "+this.readyState; setTimeout ( "init()", 1000 );  };
+	}
+	catch(ex){ if (window.console) console.log(exception);  document.getElementById("serverStatus").innerHTML = ex; }
+} else {
+document.getElementById("serverStatus").innerHTML = "This browser doesnt support websockets";
+}
+   </script>
+</body>
+</html>
