@@ -13,28 +13,8 @@ build_script:
     c:\mp\.nuget\nuget.exe update -self
     
     c:\mp\.nuget\nuget.exe restore
-    
-    "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" MissionPlanner.sln /m /p:Configuration=Release /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-    
-    dir c:\mp\bin\Release\net461
 
-    cd bin\Release\net461
-
-    for /f %%f in ('dir /a-d /b plugins') do if exist .\%%f del .\plugins\%%f
-
-    set PATH=c:\cygwin\bin;%PATH%
-
-    7z a -tzip ..\..\..\MissionPlannerBeta.zip *  
-
-    cd ..
-
-    c:\cygwin\bin\find.exe net461 -type f -print0 | xargs.exe -i -0 md5sum.exe '{}' > checksums.txt
-
-    copy checksums.txt c:\mp\
-
-    cd c:\mp\
-
-    cov-build.exe --dir cov-int msbuild.exe MissionPlanner.sln /m /l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll
+    cov-build.exe --dir cov-int msbuild.exe MissionPlanner.sln /m /l:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
     7z a -tzip MissionPlannerCov-int.zip c:\mp\bin\Release\net461\* 
 
