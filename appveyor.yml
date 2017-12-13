@@ -34,7 +34,7 @@ build_script:
 
     cd c:\mp\
 
-    cov-build.exe --dir cov-int msbuild.exe "MissionPlanner.sln /m /l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    cov-build.exe --dir cov-int msbuild.exe MissionPlanner.sln /m /l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll
 
     7z a -tzip MissionPlannerCov-int.zip c:\mp\bin\Release\net461\* 
 
