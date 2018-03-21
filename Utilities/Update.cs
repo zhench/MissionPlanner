@@ -188,29 +188,29 @@ namespace MissionPlanner.Utilities
             if (updateFound)
             {
                 // do the update in the main thread
-                MainV2.instance.Invoke((MethodInvoker) delegate
-                {
-                    string extra = "";
+                //MainV2.instance.Invoke((MethodInvoker) delegate
+                //{
+                //    string extra = "";
 
-                    if (dobeta)
-                        extra = "BETA ";
+                //    if (dobeta)
+                //        extra = "BETA ";
 
-                    DialogResult dr = DialogResult.Cancel;
+                //    DialogResult dr = DialogResult.Cancel;
 
 
-                    dr = CustomMessageBox.Show(
-                        extra + Strings.UpdateFound + " [link;" + baseurl + "/ChangeLog.txt;ChangeLog]",
-                        Strings.UpdateNow, MessageBoxButtons.YesNo);
+                //    dr = CustomMessageBox.Show(
+                //        extra + Strings.UpdateFound + " [link;" + baseurl + "/ChangeLog.txt;ChangeLog]",
+                //        Strings.UpdateNow, MessageBoxButtons.YesNo);
 
-                    if (dr == DialogResult.Yes)
-                    {
-                        DoUpdate();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                });
+                //    if (dr == DialogResult.Yes)
+                //    {
+                //        DoUpdate();
+                //    }
+                //    else
+                //    {
+                //        return;
+                //    }
+                //});
             }
             else if (NotifyNoUpdate)
             {
